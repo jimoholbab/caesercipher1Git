@@ -1,0 +1,133 @@
+<html>
+
+<head>
+    <title>Ceaser Cipher</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-content: center;
+            align-items: center;
+        }
+
+        #input-text {
+            margin-bottom: 20px;
+            width: 500px;
+        }
+
+        #shift {
+            margin-right: 50px;
+        }
+
+        #submit {
+            margin-left: 50px;
+            color: cadetblue;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        #submit:hover {
+            color: darkcyan;
+        }
+
+        #result-title {
+            margin-top: 40px;
+            flex-direction: row;
+            display: flex;
+            align-items: flex-start;
+            justify-items: flex-start;
+            justify-content: flex-start;
+            align-content: flex-start;
+        }
+
+        #result {
+            width: 500px;
+            border-color: darkslategrey;
+            border-width: 1px;
+            min-height: 100;
+            border-style: solid;
+        }
+    </style>
+</head>
+
+<body style="">
+    <h1>
+        <center>Ceaser Cipher</center>
+    </h1>
+    <textarea rows="10" cols="20" id="input-text"></textarea>
+    <div>
+        <div>Shift</div>
+        <input type="number" value="1" id="shift" />
+        <input type="radio" id="encrypt" name="mode" value="encrypt" checked /> Encrypt
+        <input type="radio" id="decrypt" name="mode" value="decrypt" /> Decrypt
+        <input type="submit" id="submit" value="Submit" onclick="clickButton()" />
+    </div>
+    <div id="result-title">Result</div>
+    <div id="result"></div>
+</body>
+<script>
+    var alphabets = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
+                     "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",];
+    
+    function encrypt(text, shift) {
+        var result = "";
+        //loop through each caharacter in the text
+        for (var i = 0; i < text.length; i++) {
+
+            //get the character position of each letter in the alphabet array
+            var c = alphabets.indexOf(text[i]);
+
+            // handle uppercase letters
+            //  get the equvalent letter in the shifted position for uppercase Letter
+            if (c >= 0 && c <= 25) {
+                // IN the alphabet array, “A” is in position 0 and the 26 is the total number of character 	 i.e A to Z
+                result += alphabets[(c - 0 + shift) % 26 + 0];
+
+                // handle lowercase letters
+                // get the equivalent letter in the shifted position for lowercase Letter
+            } else if (c >= 26 && c <= 51) {
+                // IN the alphabet array, “A” is in position 26 and the 26 is the total number of character  i.e a to z
+                result += alphabets[(c - 26 + shift) % 26 + 26];
+
+                // its not a letter, let it through with encryption
+            } else {
+                result += text.charAt(i);
+            }
+        }
+
+        // return the encrypted result
+        return result;
+    }
+
+    function decrypt(text, shift) {
+        var result = "";
+        shift = (26 - shift) % 26;
+        result = encrypt(text, shift);
+        return result;
+    }
+
+    function clickButton(){
+        var _mode = document.querySelector('input[name="mode"]:checked').value;
+        var _input = document.getElementById("input-text").value;
+        var _shift = document.getElementById("shift").value;
+
+        
+
+        if(!Number.isInteger(_shift) || _shift < 0){
+            _shift = 1;
+        }
+
+        if(_mode == "encrypt"){
+           var result = encrypt(_input, _shift);
+           document.getElementById("result").innerHTML = result;
+        }
+
+        if(_mode == "decrypt"){
+            var result = decrypt(_input, _shift);
+            document.getElementById("result").innerHTML = result;
+        }
+
+    }
+</script>
+
+</html>
